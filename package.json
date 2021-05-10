@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/tandica/tinyapp/issues"
   },
-  "homepage": "https://github.com/tandica/tinyapp#readme"
+  "homepage": "https://github.com/tandica/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
