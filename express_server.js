@@ -18,17 +18,22 @@ app.get("/", (req, res) => {
 
 app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
-  });
+});
 
 app.get("/hello", (req, res) => {
 res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
-//add a route for //urls
+//add routes
 app.get("/urls", (req, res) => {
     const templateVars = { urls: urlDatabase };
     res.render("urls_index", templateVars);
-  });
+});
+
+app.get("/urls/:shortURL", (req, res) => {
+    const templateVars = { shortURL: req.params.shortURL, longURL: req.params.urlDatabase };
+    res.render("urls_show", templateVars);
+});  
 
 //verify server is listening
 app.listen(PORT, () => {
