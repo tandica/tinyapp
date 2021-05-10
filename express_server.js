@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const PORT = 8080; 
 
+//tell Express to use EJS as template engine
+app.set("view engine", "ejs");
+
 //create url database with specified websites
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
