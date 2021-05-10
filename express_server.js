@@ -24,6 +24,12 @@ app.get("/hello", (req, res) => {
 res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+//add a route for //urls
+app.get("/urls", (req, res) => {
+    const templateVars = { urls: urlDatabase };
+    res.render("urls_index", templateVars);
+  });
+
 //verify server is listening
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
