@@ -30,8 +30,6 @@ app.get("/hello", (req, res) => {
 });
 
 
-
-
 //add routes
 app.get("/urls/new", (req, res) => {
     res.render("urls_new");
@@ -46,6 +44,23 @@ app.get("/urls/:shortURL", (req, res) => {
     const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
     res.render("urls_show", templateVars);
 });  
+
+//recieve form submission
+app.post("/urls", (req, res) => {
+    console.log(req.body);  // Log the POST request body to the console
+    res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  });
+
+//generate random string
+const generateRandomString = function (length, symbol) {
+    let result = '';
+    for (let i = 0; i < length; --i) {
+        result += symbol[Math.floor(Math.random() * symbol.length)]
+    }
+    return result;
+}
+
+generateRandomString(6, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
 
 //verify server is listening
 app.listen(PORT, () => {
