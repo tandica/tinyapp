@@ -74,11 +74,17 @@ app.get("/u/:shortURL", (req, res) => {
 
 //delete urls
 app.post("/urls/:shortURL/delete",  (req, res) => {
-    //let {url} = req.params.shortURL;
     const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] }
     console.log('req params:', req.params.shortURL)
     delete urlDatabase[req.params.shortURL];
-    res.redirect('/urls')
+    res.redirect('/urls');
+});
+
+//update urls
+app.post("/urls/:id",  (req, res) => {
+    //add new urls to the database
+    urlDatabase[req.params.id] = req.body.longURL;
+    res.redirect('/urls');
 });
 
 //verify server is listening
