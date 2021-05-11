@@ -52,14 +52,6 @@ app.get("/urls/:shortURL", (req, res) => {
     res.render("urls_show", templateVars);
 });  
 
-//redirect short urls to their referenced webpage
-app.get("/u/:shortURL", (req, res) => {
-    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-    const longURL = urlDatabase[req.params.shortURL];
-    //const longURL = req.body.longURL;
-    //console.log('req.body:', req.body.longURL);
-    res.redirect(`/u/${longURL}`);
-});
 
 //recieve form submission
 app.post("/urls", (req, res) => {
@@ -70,6 +62,15 @@ app.post("/urls", (req, res) => {
     console.log('urldatabase:', urlDatabase);
     console.log('req.body:', req.body.longURL);
     res.redirect(`/urls/${shortURL}`);
+});
+
+//redirect short urls to their referenced webpage
+app.get("/u/:shortURL", (req, res) => {
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+    const longURL = urlDatabase[req.params.shortURL];
+    console.log('req.params:', req.params)
+    console.log('longURL:', longURL)
+    res.redirect(longURL);
 });
 
 //verify server is listening
