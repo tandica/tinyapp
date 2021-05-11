@@ -52,7 +52,6 @@ app.get("/urls/:shortURL", (req, res) => {
     res.render("urls_show", templateVars);
 });  
 
-
 //recieve form submission
 app.post("/urls", (req, res) => {
     let shortURL = generateRandomString()
