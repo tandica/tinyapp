@@ -29,6 +29,15 @@ app.get("/hello", (req, res) => {
     res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+//generate random string
+const generateRandomString = function (length) {
+    let randomString = '';
+    let symbol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 6; i++) {
+        randomString += symbol[Math.floor(Math.random() * symbol.length)]
+    }
+    return randomString;
+}
 
 //add routes
 app.get("/urls/new", (req, res) => {
@@ -47,22 +56,15 @@ app.get("/urls/:shortURL", (req, res) => {
 
 //recieve form submission
 app.post("/urls", (req, res) => {
-    console.log(req.body);  // Log the POST request body to the console
-    res.send("Ok");         // Respond with 'Ok' (we will replace this)
-  });
-
-//generate random string
-const generateRandomString = function (length, symbol) {
-    let result = '';
-    for (let i = 0; i < length; --i) {
-        result += symbol[Math.floor(Math.random() * symbol.length)]
-    }
-    return result;
-}
-
-generateRandomString(6, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+    let shortURL = generateRandomString()
+    urlDatabase[shortURL] = req.body.longURL;
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+    //view database to see if its being updated
+    console.log('urldatabase:', urlDatabase);
+    res.redirect(`/urls/${shortURL}`);
+});
 
 //verify server is listening
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
+console.log(`App listening on port ${PORT}!`);
 });
