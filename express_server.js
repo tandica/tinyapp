@@ -3,12 +3,10 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = 8080; 
 
-
 //tell Express to use EJS as template engine
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended: true}));
-
 
 //create url database with specified websites
 const urlDatabase = {
@@ -54,6 +52,15 @@ app.get("/urls/:shortURL", (req, res) => {
     res.render("urls_show", templateVars);
 });  
 
+//redirect short urls to their referenced webpage
+app.get("/u/:shortURL", (req, res) => {
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+    const longURL = urlDatabase[req.params.shortURL];
+    //const longURL = req.body.longURL;
+    //console.log('req.body:', req.body.longURL);
+    res.redirect(`/u/${longURL}`);
+});
+
 //recieve form submission
 app.post("/urls", (req, res) => {
     let shortURL = generateRandomString()
@@ -61,6 +68,7 @@ app.post("/urls", (req, res) => {
     const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
     //view database to see if its being updated
     console.log('urldatabase:', urlDatabase);
+    console.log('req.body:', req.body.longURL);
     res.redirect(`/urls/${shortURL}`);
 });
 
