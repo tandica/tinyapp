@@ -101,6 +101,13 @@ app.get("/register",  (req, res) => {
     res.render('urls_register', templateVars);
 })
 
+//login page
+app.get("/login",  (req, res) => {
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: req.cookies['userId'] };
+    res.render('urls_login', templateVars);
+})
+
+
 //POST
 
 //recieve form submission
@@ -146,7 +153,6 @@ app.post("/logout",  (req, res) => {
 //register a user 
 app.post("/register",  (req, res) => {
     let user = generateRandomString();
-    //let userEmail = findUserByEmail();
     if (req.body.email === '' || req.body.password === '') {
         res.status(400).send('Error 400: Please input your email.');
     } else if (findUserByEmail(req.body.email)) {
