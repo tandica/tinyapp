@@ -46,7 +46,7 @@ const findUserByEmail = (email) => {
             return users[user];
         }
     }
-    return false;
+    return null;
 }
 
 //add routes
@@ -66,21 +66,22 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-    const loginData = { username: req.cookies["userId"] };
-    res.render("urls_new");
+    //const loginData = { username: req.cookies["userId"] };
+    const templateVars = { user: req.cookies['userId'] }
+    res.render("urls_new", templateVars);
 });
 
 app.get("/urls", (req, res) => {
     //get username and render the appropriate form
-    let username = req.cookies['userId']
-    console.log('username from urls:', username)
-    const templateVars = {  urls: urlDatabase, user: username }
-    
+    //let username = req.cookies['userId']
+    //console.log('username from urls:', username)
+    const templateVars = {  urls: urlDatabase, user: users[req.cookies['userId']] }
+    //console.log('req.cookies:', req.cookies['userId'].id)
     res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-    const loginData = { username: req.cookies["userId"] };
+    //const loginData = { username: req.cookies["userId"] };
     const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: req.cookies['userId'] };
     res.render("urls_show", templateVars);
 });  
@@ -96,8 +97,8 @@ app.get("/u/:shortURL", (req, res) => {
 
 //get register page
 app.get("/register",  (req, res) => {
-    let username = req.cookies['userId'] 
-    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: username};
+    //let username = req.cookies['userId'] 
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: req.cookies['userId']};
     res.render('urls_register', templateVars);
 })
 
@@ -136,17 +137,27 @@ app.post("/urls/:id",  (req, res) => {
 
 //login cookies
 app.post("/login",  (req, res) => {
-    let username = req.body.Username;
+    //console.log('first:', users[user])
+    if (!findUserByEmail(req.body.email)) {
+        res.status(403).send('Error 403: Email not found. Please register.');
+    } else if (findUserByEmail(req.body.email)['password'] !== req.body.password) {
+        res.status(403).send('Error 403: Password incorrect.');
+    } else {
+        const foundUserID = findUserByEmail(req.body.email).id;
+        res.cookies('userId', foundUserID);
+    }
+//console.log(users[user])
+    //let username = req.body.Username;
     //console.log(username);
-    res.cookie('Username', username);
+    //res.cookie('Username', username);
     res.redirect('/urls');
 });
 
 //logout cookies
 app.post("/logout",  (req, res) => {
-    let username = req.body.Username;
-    res.cookie('Username', username);
-    res.clearCookie('Username', username);
+    //let username = req.body.Username;
+ 
+    res.clearCookie('userId');
     res.redirect('/urls');
 });
 
@@ -158,11 +169,12 @@ app.post("/register",  (req, res) => {
     } else if (findUserByEmail(req.body.email)) {
         res.status(400).send('Error 400: Email already exists. Please use a new one.');
     }
-    users[user] = {
+    const newUser = {
         id: user, 
         email: req.body.email, 
         password: req.body.password }
-    res.cookie('userId', users[user])
+        users[user] = newUser;
+    res.cookie('userId', newUser.id)
     res.redirect('/urls');
 });
 
