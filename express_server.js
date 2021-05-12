@@ -39,6 +39,8 @@ const generateRandomString = function (length) {
 }
 
 //add routes
+//GET
+
 app.get("/urls/new", (req, res) => {
     const loginData = { username: req.cookies["Username"] };
     res.render("urls_new");
@@ -58,6 +60,24 @@ app.get("/urls/:shortURL", (req, res) => {
     res.render("urls_show", templateVars);
 });  
 
+//redirect short urls to their referenced webpage
+app.get("/u/:shortURL", (req, res) => {
+    //const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+    const longURL = urlDatabase[req.params.shortURL];
+    console.log('req.params:', req.params)
+    console.log('longURL:', longURL)
+    res.redirect(longURL);
+});
+
+//get register page
+app.get("/register",  (req, res) => {
+    let username = req.cookies['Username'] 
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username};
+    res.render('urls_register', templateVars);
+})
+
+//POST
+
 //recieve form submission
 app.post("/urls", (req, res) => {
     let shortURL = generateRandomString()
@@ -67,15 +87,6 @@ app.post("/urls", (req, res) => {
     console.log('urldatabase:', urlDatabase);
     console.log('req.body:', req.body.longURL);
     res.redirect(`/urls/${shortURL}`);
-});
-
-//redirect short urls to their referenced webpage
-app.get("/u/:shortURL", (req, res) => {
-    //const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-    const longURL = urlDatabase[req.params.shortURL];
-    console.log('req.params:', req.params)
-    console.log('longURL:', longURL)
-    res.redirect(longURL);
 });
 
 //delete urls
@@ -107,6 +118,12 @@ app.post("/logout",  (req, res) => {
     //console.log(username)
     res.cookie('Username', username);
     res.clearCookie('Username', username);
+    res.redirect('/urls');
+});
+
+//register a user 
+app.post("/register",  (req, res) => {
+    //const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username}
     res.redirect('/urls');
 });
 
