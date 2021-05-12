@@ -1,11 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser')
 const app = express();
 const PORT = 8080; 
 
 //tell Express to use EJS as template engine
 app.set("view engine", "ejs");
-
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}));
 
 //create url database with specified websites
@@ -44,8 +45,10 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-    const loginData = { username: req.cookies["Username"] };
-    const templateVars = {  urls: urlDatabase };
+    //get username and render the appropriate form
+    let username = req.cookies['Username']
+    console.log('username from urls:', username)
+    const templateVars = {  urls: urlDatabase, username }
     res.render("urls_index", templateVars);
 });
 
@@ -93,7 +96,7 @@ app.post("/urls/:id",  (req, res) => {
 //login cookies
 app.post("/login",  (req, res) => {
     let username = req.body.Username;
-    console.log(username);
+    //console.log(username);
     res.cookie('Username', username);
     res.redirect('/urls');
 });
