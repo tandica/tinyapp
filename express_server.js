@@ -39,15 +39,18 @@ const generateRandomString = function (length) {
 
 //add routes
 app.get("/urls/new", (req, res) => {
+    const loginData = { username: req.cookies["Username"] };
     res.render("urls_new");
 });
 
 app.get("/urls", (req, res) => {
-    const templateVars = { urls: urlDatabase };
+    const loginData = { username: req.cookies["Username"] };
+    const templateVars = {  urls: urlDatabase };
     res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+    const loginData = { username: req.cookies["Username"] };
     const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
     res.render("urls_show", templateVars);
 });  
@@ -56,7 +59,7 @@ app.get("/urls/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
     let shortURL = generateRandomString()
     urlDatabase[shortURL] = req.body.longURL;
-    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+    // const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
     //view database to see if its being updated
     console.log('urldatabase:', urlDatabase);
     console.log('req.body:', req.body.longURL);
@@ -65,7 +68,7 @@ app.post("/urls", (req, res) => {
 
 //redirect short urls to their referenced webpage
 app.get("/u/:shortURL", (req, res) => {
-    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+    //const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
     const longURL = urlDatabase[req.params.shortURL];
     console.log('req.params:', req.params)
     console.log('longURL:', longURL)
@@ -74,7 +77,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 //delete urls
 app.post("/urls/:shortURL/delete",  (req, res) => {
-    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] }
+    // const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] }
     console.log('req params:', req.params.shortURL)
     delete urlDatabase[req.params.shortURL];
     res.redirect('/urls');
@@ -84,6 +87,23 @@ app.post("/urls/:shortURL/delete",  (req, res) => {
 app.post("/urls/:id",  (req, res) => {
     //add new urls to the database
     urlDatabase[req.params.id] = req.body.longURL;
+    res.redirect('/urls');
+});
+
+//login cookies
+app.post("/login",  (req, res) => {
+    let username = req.body.Username;
+    console.log(username);
+    res.cookie('Username', username);
+    res.redirect('/urls');
+});
+
+//logout cookies
+app.post("/logout",  (req, res) => {
+    let username = req.body.Username;
+    //console.log(username)
+    res.cookie('Username', username);
+    res.clearCookie('Username', username);
     res.redirect('/urls');
 });
 
