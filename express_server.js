@@ -32,11 +32,21 @@ const users = {
       email: "user@example.com", 
       password: "purple-monkey-dinosaur"
     },
-   "user2RandomID": {
+    "user2RandomID": {
       id: "user2RandomID", 
       email: "user2@example.com", 
       password: "dishwasher-funk"
     }
+}
+
+//access user emails
+const findUserByEmail = (email) => {
+    for (let user in users) {
+        if (users[user].email === email) {
+            return users[user];
+        }
+    }
+    return false;
 }
 
 //add routes
@@ -135,13 +145,17 @@ app.post("/logout",  (req, res) => {
 
 //register a user 
 app.post("/register",  (req, res) => {
-    
     let user = generateRandomString();
+    //let userEmail = findUserByEmail();
+    if (req.body.email === '' || req.body.password === '') {
+        res.status(400).send('Error 400: Please input your email.');
+    } else if (findUserByEmail(req.body.email)) {
+        res.status(400).send('Error 400: Email already exists. Please use a new one.');
+    }
     users[user] = {
         id: user, 
         email: req.body.email, 
         password: req.body.password }
-    //const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[user]}
     res.cookie('userId', users[user])
     res.redirect('/urls');
 });
