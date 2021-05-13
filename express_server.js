@@ -20,10 +20,15 @@ const generateRandomString = function (length) {
 }
 
 //create url database with specified websites
+// const urlDatabase = {
+//     "b2xVn2": "http://www.lighthouselabs.ca",
+//     "9sm5xK": "http://www.google.com"
+// };
+
 const urlDatabase = {
-    "b2xVn2": "http://www.lighthouselabs.ca",
-    "9sm5xK": "http://www.google.com"
-};
+    b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+    i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
+  };
 
 //store and access users in the app
 const users = { 
@@ -66,7 +71,9 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-    //const loginData = { username: req.cookies["userId"] };
+    // if (!findUserByEmail(req.body.email)) {
+    //     res.redirect(`/urls/login`);
+    // }
     const templateVars = { user: req.cookies['userId'] }
     res.render("urls_new", templateVars);
 });
@@ -83,6 +90,7 @@ app.get("/urls", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
     //const loginData = { username: req.cookies["userId"] };
     const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: req.cookies['userId'] };
+
     res.render("urls_show", templateVars);
 });  
 
@@ -98,7 +106,7 @@ app.get("/u/:shortURL", (req, res) => {
 //get register page
 app.get("/register",  (req, res) => {
     //let username = req.cookies['userId'] 
-    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: req.cookies['userId']};
+    const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: req.cookies['userId'] };
     res.render('urls_register', templateVars);
 })
 
@@ -146,10 +154,6 @@ app.post("/login",  (req, res) => {
         const foundUserID = findUserByEmail(req.body.email).id;
         res.cookies('userId', foundUserID);
     }
-//console.log(users[user])
-    //let username = req.body.Username;
-    //console.log(username);
-    //res.cookie('Username', username);
     res.redirect('/urls');
 });
 
@@ -160,6 +164,14 @@ app.post("/logout",  (req, res) => {
     res.clearCookie('userId');
     res.redirect('/urls');
 });
+
+
+// app.post("/urls/:shortURL",  (req, res) => {
+//     if (!findUserByEmail(req.body.email)) {
+//         res.send('Error: Please login');
+// }
+// });
+        
 
 //register a user 
 app.post("/register",  (req, res) => {

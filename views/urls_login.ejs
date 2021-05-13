@@ -10,22 +10,22 @@
 <body>
     <main style="margin: 1em;"></main>
     <%-include('partials/_header') %>
-    <div class="card text-center">
+    <!-- <div class="card text-center"> -->
         <div class="card-header"></div>
         <div class="card-body">
             <h3>Login</h3>
         </div>
-        <form action="/login" method="POST" style="padding-left: 30%; padding-top: 5%;">
-        <div class="form-group" style="width: 60%;">
+        <form action="/login" method="POST" style="padding-left: 1%;">
+        <div class="form-group" style="width: 30%;">
             <label for="email">Email</label>
-            <input type="email" name="email" class="form-control" >
+            <input type="email" name="email" class="form-control" placeholder="Enter email...">
             <small class="form-text text-muted"></small>
         </div>
-        <div class="form-group" style="width: 60%;">
+        <div class="form-group" style="width: 30%;">
             <label for="password">Password</label>
-            <input type="password"  name="password" class="form-control">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <input type="password"  name="password" class="form-control" placeholder="Password...">
         </div>
+        <button type="submit" class="btn btn-primary">Login</button>
         </form>
         </div>
     </main>
