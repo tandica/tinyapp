@@ -30,11 +30,15 @@
             <td><%= url %></td>
             <td><%= urls[url]['longURL'] %></td>
             <td> 
-              <a class="btn btn-primary" href=<%=`/urls/${url}`%>>Edit </a>
+             
+              <form method="GET" action=<%=`/urls/${url}`%>>
+                <input type='submit' class="btn btn-primary" value='Edit'>
+                </form>
             </td>
             <td> 
               <form method="POST" action=<%=`/urls/${url}/delete`%>>
               <input type='submit' class="btn btn-danger" value='Delete'>
+              </form>
           </td>
           </tr>
         <% } %>
