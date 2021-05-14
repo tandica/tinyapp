@@ -1,5 +1,3 @@
-
-
 //access user emails
 const findUserByEmail = (email, users) => {
     for (let user in users) {

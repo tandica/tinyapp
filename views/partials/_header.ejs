@@ -8,36 +8,19 @@
         <div class="navbar-nav">
           <a class="nav-item nav-link" href="/urls">My URLs</a>
           <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-          <!-- <a class="nav-item nav-link" href=/register>Register</a> -->
-          
         </div>
       </div>
         <% if (user) { %>
-        <!-- <h5 class="p">Logged in as: <%=user.email%></h5> -->
-        <!-- <a class="nav-item nav-link" href=/login>Logout</a> -->
         Logged in as <%= user.email %>!  
         <form class="nav-item nav-link"  action="/logout" method="POST">
           <button type="submit" value="submit" class="btn btn-light">Logout</button>   
         </form>
-        <!-- <form class="form-inline" action="/logout" method="POST">
-            <input type="submit" class="btn btn-light" value="Logout"></input>
-        </form> -->
         <% } else { %>
           <div class="navbar-nav">
             <a class="nav-item nav-link" href="/login">Login</a>
             <a class="nav-item nav-link" href="/register">Register</a>    
-            <!-- <button type="submit" class="btn btn-light">Login</button> -->
-            <!-- <form action="/login" method="POST">
-          <input type="text" name="Username">
-          <button type="submit" class="btn btn-light">Login</button> -->
-        <!-- </form> -->
       </div> 
       <% } %>
-      <!-- <form action="/login" method="POST">
-        <input type="text" name="Username">
-        <input type="submit" class="btn btn-light" value="Login">
-      </form>
-       -->
     </nav>
   </header>
   

@@ -6,13 +6,11 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  
   <title>TinyApp</title>
 </head>
 <body>
     <%-include('partials/_header') %> 
-
-    <!-- <h1>List of links</h1> -->
-  
   <main style="margin: 1em;">
     <h3>My URLs</h3>
     <table class="table">
@@ -30,7 +28,6 @@
             <td><%= url %></td>
             <td><%= urls[url]['longURL'] %></td>
             <td> 
-             
               <form method="GET" action=<%=`/urls/${url}`%>>
                 <input type='submit' class="btn btn-primary" value='Edit'>
                 </form>
