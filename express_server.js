@@ -175,7 +175,7 @@ app.post("/login",  (req, res) => {
 if (email.length === 0 || password.length === 0) {
     res.status(403).send('Error 403: Email not found. Please fill out form.');
 } else if (!userEmail || !bcrypt.compareSync(password, userEmail.password)) {
-    res.status(403).send('Error 403: Password or user incorrect.');
+    res.status(403).send('Error 403: User or password incorrect. Please ensure you are registered.');
 } else {
     req.session.userID = userEmail;
     //res.cookie('userId', userEmail.id);
