@@ -37,16 +37,8 @@ const users = {
 //add routes
 //GET
 
-app.get("/", (req, res) => {
-    res.send("Hello!");
-});
-
 app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
-});
-
-app.get("/hello", (req, res) => {
-    res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 app.get("/urls/new", (req, res) => {
@@ -62,16 +54,12 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/urls", (req, res) => {
     let userId = req.session['userId'];
-    console.log('userid:', userId);
-    console.log('users:', users)
     if (!userId) {
         res.redirect(`/login`);
     } else {
         userId = req.session['userId'].id
         const userUrls = urlsForUser(userId, urlDatabase);
-        console.log('userURLS:', userUrls)
         const templateVars = {  urls: userUrls, user: users[userId] }
-        console.log({templateVars})
         res.render("urls_index", templateVars);
     }
 });
@@ -90,8 +78,6 @@ app.get("/urls/:shortURL", (req, res) => {
 //redirect short urls to their referenced webpage
 app.get("/u/:shortURL", (req, res) => {
     const longURL = urlDatabase[req.params.shortURL]['longURL'];
-    console.log('req.params:', req.params)
-    console.log('longURL:', longURL)
     res.redirect(longURL);
 });
 
@@ -113,20 +99,15 @@ app.get("/login",  (req, res) => {
 //recieve form submission
 app.post("/urls", (req, res) => {
     let shortURL = generateRandomString()
-    console.log('req session:',  req.session['userId'].id)
     urlDatabase[shortURL] = {
         longURL: req.body.longURL, userID: req.session['userId'].id };
-    console.log('urldatabase:', urlDatabase);
-    console.log('req.body:', req.body.longURL);
     res.redirect(`/urls`);
 });
 
 //delete urls
 app.post("/urls/:shortURL/delete",  (req, res) => {
     const userId1 = req.session['userId'].id;
-    console.log('userid1:', userId1)
     const shortURL = req.params.shortURL;
-    console.log('shorturl:', shortURL, urlDatabase[shortURL].userID);
     if (urlDatabase[shortURL].userID === userId1) {
         delete urlDatabase[req.params.shortURL];
         res.redirect('/urls');
@@ -142,7 +123,7 @@ app.post("/urls/:id",  (req, res) => {
     const userId1 = req.session['userId'];
     const shortURL = req.params.id;
     const longURL = req.body.longURL;
-    if (urlDatabase[shortURL] && urlDatabase[shortURL].userID === userId1) {
+    if (urlDatabase[shortURL] && urlDatabase[shortURL].userID === userId1.id) {
         urlDatabase[shortURL]['longURL'] = longURL;
         res.redirect('/urls');
         return;
@@ -156,7 +137,6 @@ app.post("/login",  (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const userEmail = findUserByEmail(email);
-    console.log('email:', userEmail)
 if (email.length === 0 || password.length === 0) {
     res.status(403).send('Error 403: Email not found. Please fill out form.');
 } else if (!userEmail || !bcrypt.compareSync(password, userEmail.password)) {
@@ -182,16 +162,12 @@ app.post("/register",  (req, res) => {
     } else if (findUserByEmail(req.body.email)) {
         res.status(400).send('Error 400: Email already exists. Please use a new one.');
     }
-    console.log("before adding", users)
     const newUser = {
         id: randomID, 
         email: req.body.email, 
         password: bcrypt.hashSync(req.body.password, 10) }
         users[randomID] = newUser;
-        console.log(bcrypt.hashSync(req.body.password, 10))
-        //res.cookie('userId', randomID);
     req.session.userId = newUser;
-    console.log("after adding", users)
     res.redirect('/urls');
 });
 
