@@ -113,7 +113,7 @@ app.post("/urls/:shortURL/delete",  (req, res) => {
         res.redirect('/urls');
         return;
     } else {
-        res.status(403).send('Cannot delete URL')
+        res.status(403).send('Cannot delete URL. Please login.')
     }
 
 });
@@ -128,7 +128,7 @@ app.post("/urls/:id",  (req, res) => {
         res.redirect('/urls');
         return;
     } else {
-        res.status(403).send('Cannot edit URL')
+        res.status(403).send('Cannot edit URL. Please login.')
     }
 });
 
