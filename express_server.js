@@ -112,8 +112,12 @@ app.get("/login", (req, res) => {
 //recieve form submission
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
+  let longURL = req.body.longURL;
+  if (!longURL.includes('http')) {
+    longURL = 'http://' + longURL;
+  }
   urlDatabase[shortURL] = {
-    longURL: req.body.longURL,
+    longURL,
     userID: req.session["userId"],
   };
   res.redirect(`/urls`);
@@ -136,7 +140,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.post("/urls/:id", (req, res) => {
   const userId1 = req.session["userId"];
   const shortURL = req.params.id;
-  const longURL = req.body.longURL;
+  let longURL = req.body.longURL;
+  console.log('longurl', longURL)
+  if (!longURL.includes('http')) {
+    longURL = 'http://' + longURL;
+  }
   if (urlDatabase[shortURL] && urlDatabase[shortURL].userID === userId1) {
     urlDatabase[shortURL]["longURL"] = longURL;
     res.redirect("/urls");
